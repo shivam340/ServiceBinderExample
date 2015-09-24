@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 public class MainActivity extends AppCompatActivity {
 
     private UnLeashedService mUnLeashedService = null;
+    private boolean mIsBound = false;
 
 
     @Override
@@ -20,7 +21,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         showDialog();
-
     }
 
 
@@ -34,11 +34,15 @@ public class MainActivity extends AppCompatActivity {
 
             UnLeashedService.LocalBinder localBinder = (UnLeashedService.LocalBinder) iBinder;
             mUnLeashedService = localBinder.getService();
+
+            // to identify that service is bounded to activity.
+            mIsBound = true;
+
         }
 
         @Override
         public void onServiceDisconnected(ComponentName componentName) {
-
+            mIsBound = false;
         }
     };
 
@@ -47,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        // Bind to LocalService
+        // Bind to UnLeashedService
         Intent intent = new Intent(this, UnLeashedService.class);
         bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
 
@@ -57,9 +61,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         unbindService(mConnection);
+        mIsBound = false;
     }
-
-
 
 
 
