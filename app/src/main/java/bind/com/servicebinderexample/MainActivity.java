@@ -9,8 +9,6 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Menu;
-import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -23,32 +21,46 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         showDialog();
 
+    }
+
+
+    private ServiceConnection mConnection = new ServiceConnection() {
+
+        @Override
+        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+
+            // iBinder returns instance of our LocalBinder of UnLeashedService class.
+            // typecast it to LocalBinder so we can get instance of service.
+
+            UnLeashedService.LocalBinder localBinder = (UnLeashedService.LocalBinder) iBinder;
+            mUnLeashedService = localBinder.getService();
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName componentName) {
+
+        }
+    };
+
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
         // Bind to LocalService
         Intent intent = new Intent(this, UnLeashedService.class);
         bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
+    protected void onStop() {
+        super.onStop();
+        unbindService(mConnection);
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
 
-        return super.onOptionsItemSelected(item);
-    }
 
 
     private void showDialog(){
@@ -71,31 +83,5 @@ public class MainActivity extends AppCompatActivity {
 
         alertDialogBuilder.create().show();
     }
-
-
-
-
-
-
-
-    private ServiceConnection mConnection = new ServiceConnection() {
-
-        @Override
-        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
-
-            // iBinder returns instance of our LocalBinder of UnLeashedService class.
-            // typecast it to LocalBinder so we can get instance of service.
-
-            UnLeashedService.LocalBinder localBinder = (UnLeashedService.LocalBinder) iBinder;
-            mUnLeashedService = localBinder.getService();
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName componentName) {
-
-        }
-    };
-
-
 
 }
