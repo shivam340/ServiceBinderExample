@@ -1,15 +1,21 @@
 package bind.com.servicebinderexample;
 
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity {
+
+    private UnLeashedService mUnLeashedService = null;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,8 +25,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Bind to LocalService
         Intent intent = new Intent(this, UnLeashedService.class);
-        bindService(intent, null, Context.BIND_AUTO_CREATE);
-
+        bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
     }
 
     @Override
@@ -66,4 +71,31 @@ public class MainActivity extends AppCompatActivity {
 
         alertDialogBuilder.create().show();
     }
+
+
+
+
+
+
+
+    private ServiceConnection mConnection = new ServiceConnection() {
+
+        @Override
+        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+
+            // iBinder returns instance of our LocalBinder of UnLeashedService class.
+            // typecast it to LocalBinder so we can get instance of service.
+
+            UnLeashedService.LocalBinder localBinder = (UnLeashedService.LocalBinder) iBinder;
+            mUnLeashedService = localBinder.getService();
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName componentName) {
+
+        }
+    };
+
+
+
 }
