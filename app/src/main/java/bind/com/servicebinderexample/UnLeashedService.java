@@ -64,4 +64,10 @@ public class UnLeashedService extends Service {
         }
     }
 
+
+    /** method for clients */
+    public void doSomeHeavyWorkHere() {
+        Log.e(TAG , " working in service  , don't disturb");
+    }
+
 }
