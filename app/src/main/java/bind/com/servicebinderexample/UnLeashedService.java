@@ -14,13 +14,15 @@ public class UnLeashedService extends Service {
 
     private static final String TAG = UnLeashedService.class.getSimpleName();
 
+    // Binder given to clients
+    private final IBinder mBinder = new LocalBinder();
 
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
 
         Log.i(TAG, "in onBind()");
-        return null;
+        return mBinder;
     }
 
 
@@ -61,6 +63,5 @@ public class UnLeashedService extends Service {
             return UnLeashedService.this;
         }
     }
-
 
 }
