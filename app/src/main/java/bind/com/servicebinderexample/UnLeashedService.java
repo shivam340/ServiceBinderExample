@@ -2,6 +2,7 @@ package bind.com.servicebinderexample;
 
 import android.app.Service;
 import android.content.Intent;
+import android.os.Binder;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -48,5 +49,18 @@ public class UnLeashedService extends Service {
         Log.i(TAG, "in onStartCommand()");
         return super.onStartCommand(intent, flags, startId);
     }
+
+
+    /**
+     * Class used for client binder so it can call public methods of service.
+     * This service will run in same process so no need to worry about IPC.
+     */
+    public class LocalBinder extends Binder{
+
+        UnLeashedService getService(){
+            return UnLeashedService.this;
+        }
+    }
+
 
 }
