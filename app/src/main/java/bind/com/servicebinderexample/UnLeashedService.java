@@ -6,6 +6,7 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.widget.Toast;
 
 /**
  * Created by shivam on 9/24/15.
@@ -68,6 +69,7 @@ public class UnLeashedService extends Service {
     /** method for clients */
     public void doSomeHeavyWorkHere() {
         Log.e(TAG , " working in service  , don't disturb");
+        Toast.makeText(getApplicationContext(), "Hello From Service.", Toast.LENGTH_SHORT).show();
     }
 
 }

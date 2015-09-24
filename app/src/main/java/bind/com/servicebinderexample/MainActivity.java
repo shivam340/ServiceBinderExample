@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -71,10 +72,17 @@ public class MainActivity extends AppCompatActivity {
                 new AlertDialog.Builder(this);
 
         alertDialogBuilder.setMessage("This is alert Dialog");
-        alertDialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+        alertDialogBuilder.setPositiveButton("SHOW TOAST", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                dialogInterface.dismiss();
+
+                if (mIsBound) {
+                    mUnLeashedService.doSomeHeavyWorkHere();
+                } else {
+                    Toast.makeText(getApplicationContext(), "service is not " +
+                            "bound to activity yet.", Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
         alertDialogBuilder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
@@ -84,7 +92,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        alertDialogBuilder.create().show();
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.setCancelable(false);
+        alertDialog.show();
     }
 
 }
