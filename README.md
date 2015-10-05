@@ -48,6 +48,8 @@ Procedure
                      // typecast it to LocalBinder so we can get instance of service.
 
                      UnLeashedService.LocalBinder localBinder = (UnLeashedService.LocalBinder) iBinder;
+                        
+                    // got service object here    
                      mUnLeashedService = localBinder.getService();
 
                      // to identify that service is bounded to activity.
@@ -78,7 +80,7 @@ Procedure
 
 
 
-          - Now u can any public method of service from activity using object of service
+          - Now u can call any public method of service from activity using object of service
 
                 if (mIsBound) {
                     mUnLeashedService.doSomeHeavyWorkHere();
